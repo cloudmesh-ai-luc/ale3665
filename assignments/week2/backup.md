@@ -8,7 +8,7 @@ Regular computer backups are important because academic work, programming projec
 
 Several consequences could directly affect the academic and technical work stored on the computer if a reliable backup were unavailable:
 
-1. **Loss of academic work:** Assignments, class notes, reports, presentations, and other university files could be permanently lost and would need to be recreated.
+1. **Loss of academic work:** Assignments, class notes, reports, presentations, and other university files could be permanently lost and would need to be recreated (but if it is not possible, you will be in the trouble).
 
 2. **Loss or corruption of programming and research projects:** Source code, datasets, experiment results, configuration files, and research documents could become corrupted or disappear after hardware failure or accidental deletion.
 
