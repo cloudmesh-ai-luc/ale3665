@@ -1,24 +1,50 @@
-# Assignment W2.3: Backup My Computer
+# Assignment W2.3: Backup Your Computer
 
 ## a. Why is backing up important?
 
-Backing up my computer is important because I store academic work, programming projects, research files, documents, and personal files that would be difficult or sometimes impossible to recreate if they were lost. A computer can experience hardware failure, file corruption, malware, accidental deletion, or other unexpected problems at any time. Without a backup, losing my computer could also mean losing many hours of work on assignments and projects. A reliable backup gives me another copy of important files so that I can restore them when something goes wrong. It also allows me to recover previous versions of files if I accidentally modify or delete something important. For this reason, I consider regular backups an essential part of protecting both my academic and personal data.
+Regular computer backups are important because academic work, programming projects, research files, documents, and personal data can be difficult or impossible to recreate after data loss. Hardware failure, file corruption, malware, accidental deletion, or operating system problems can cause important files to disappear unexpectedly. Losing these files could also result in the loss of many hours of work on assignments, research, and software projects. A reliable backup provides an additional copy of important information that can be restored when a problem occurs. Backups can also make it possible to recover previous versions of files after accidental modification or deletion. For these reasons, regular backups are an essential part of protecting academic, professional, and personal data.
 
-## b. Real-world consequences applying to me
+## b. Real-world consequences applying to this computer
 
-Three consequences that could affect me if I did not have a backup are:
+Several consequences could directly affect the academic and technical work stored on the computer if a reliable backup were unavailable:
 
-1. **Loss of my academic work:** I could lose assignments, class notes, reports, presentations, or other university files and have to recreate them.
-2. **Loss or corruption of programming and research projects (specially my Lab projects are the most important):** Source code, datasets, experiment results, and project configurations could become corrupted or disappear after a disk failure or accidental deletion.
-3. **Loss of personal files and time:** Important documents, photographs, and other personal files could be permanently lost, and professional data recovery could be expensive and may not successfully recover everything.
+1. **Loss of academic work:** Assignments, class notes, reports, presentations, and other university files could be permanently lost and would need to be recreated.
 
-## c. Which backup plan will I use?
+2. **Loss or corruption of programming and research projects:** Source code, datasets, experiment results, configuration files, and research documents could become corrupted or disappear after hardware failure or accidental deletion.
 
-I will use a **cloud backup with Microsoft OneDrive**, since I use a Windows computer. I would first sign in to OneDrive using my Microsoft account. Then I would open OneDrive settings and enable backup for important folders such as Documents, Desktop, and Pictures. I would also place important school and project files inside folders synchronized with OneDrive. After setting it up, I would verify that the synchronization is working and periodically check that my important files can be accessed from OneDrive. For programming projects, I would additionally continue using GitHub for version control, but I would not treat GitHub as a replacement for a complete computer backup.
+3. **Loss of personal files and significant recovery time:** Important documents, photographs, and other personal files could be permanently lost. Professional data recovery can also be expensive and may not successfully recover all missing information.
 
-## d. My plan to establish a backup schedule
+## c. Backup plan
 
-I will check my backups **every Sunday at 7:00 PM**. My important Documents, Desktop files, university assignments, research documents, and personal files will be synchronized with OneDrive throughout the week. During my Sunday check, I will make sure that OneDrive has completed synchronization and that there are no errors. I will also verify that my current programming projects have their recent changes committed and pushed to their appropriate Git repositories. Once a month, I will check a few backed-up files to make sure that they can actually be opened and restored successfully.
+The selected backup method is **Microsoft OneDrive**, a cloud-based storage and synchronization service available on Windows.
+
+The setup process includes the following steps:
+
+1. Sign in to OneDrive using a Microsoft account.
+2. Open OneDrive settings.
+3. Enable backup for important folders such as Desktop, Documents, and Pictures.
+4. Store important academic, research, and project files inside folders synchronized with OneDrive.
+5. Confirm that synchronization is completing successfully.
+6. Periodically verify that backed-up files can be accessed and restored.
+
+GitHub can additionally be used for version control and remote storage of programming projects. However, GitHub should not be considered a replacement for a complete computer backup because many documents, datasets, personal files, and system files may not be stored in Git repositories.
+
+## d. Backup schedule
+
+A backup verification will be performed every **Sunday at 7:00 PM**.
+
+OneDrive will synchronize important files throughout the week, including:
+
+- University assignments
+- Research documents
+- Programming project files
+- Desktop files
+- Documents
+- Important personal files
+
+During the weekly verification, OneDrive will be checked for synchronization errors or files that have not completed uploading. Programming projects will also be reviewed to ensure that recent changes have been committed and pushed to the appropriate Git repositories.
+
+Once each month, several backed-up files will be opened or restored to confirm that the backup system is functioning correctly.
 
 ## e. Real-world consequences applying to others
 
