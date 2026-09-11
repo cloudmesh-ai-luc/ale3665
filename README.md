@@ -100,7 +100,7 @@ Note:
 
 
 * [ ] Assignment W1.5: Work ahead: Refresh knowledge about Python and Linux (Past Due)
-  * [x] Review optional material in the class documentation.
+  * [ ] Review optional material in the class documentation.
 
 
 * [ ] Assignment W1.6: Improve the Web Site (Past Due)
