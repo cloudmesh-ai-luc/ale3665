@@ -2,7 +2,7 @@
 
 ## a. Why is backing up important?
 
-Regular computer backups are important because academic work, programming projects, research files, documents, and personal data can be difficult or impossible to recreate after data loss. Hardware failure, file corruption, malware, accidental deletion, or operating system problems can cause important files to disappear unexpectedly. Losing these files could also result in the loss of many hours of work on assignments, research, and software projects. A reliable backup provides an additional copy of important information that can be restored when a problem occurs. Backups can also make it possible to recover previous versions of files after accidental modification or deletion. For these reasons, regular backups are an essential part of protecting academic, professional, and personal data.
+Regular computer backups are important because academic work, programming projects, research files, documents, and personal data can be difficult or impossible to recreate after data loss. Hardware failure, file corruption, malware, accidental deletion, or operating system problems can cause important files to disappear unexpectedly. Losing these files could also result in the loss of many hours of work on assignments, research, and software projects. A reliable backup provides an additional copy of important information that can be restored when problems occurs. Backups can also make it possible to recover previous versions of files after accidental modification or deletion. For these reasons, regular backups are an essential part of protecting academic, professional, and personal data.
 
 ## b. Real-world consequences applying to this computer
 
