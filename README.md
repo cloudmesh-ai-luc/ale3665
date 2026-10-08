@@ -72,6 +72,8 @@ Note:
   * [x] Create and start a minimal VM (e.g., Ubuntu 22.04).
   * [x] Capture proof of login with a terminal screenshot (≤ 800×600 px) showing your prompt and a command.
   * [x] Write/update the tutorial in `assignments/week1/local-vm.md` and save the screenshot as `assignments/week1/vm-login.png`. [LINK/s]
+The proof of successful login can be viewed here:
+[View the VM login screenshot](vm-login.png)
 
 
 * [x] Assignment W2.5: Project proposal (Due Sep 10, 2026, 9am)
