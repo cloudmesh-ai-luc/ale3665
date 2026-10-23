@@ -1,0 +1,5 @@
+site_name: ale3665 Documentation
+theme: readthedocs
+
+nav:
+  - Home: index.md
