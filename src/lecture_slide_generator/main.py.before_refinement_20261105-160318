@@ -1,0 +1,200 @@
+"""API for generating lecture presentations."""
+
+from enum import Enum
+from pathlib import Path
+from fastapi.responses import FileResponse
+from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
+from fastapi.responses import RedirectResponse
+from fastapi import HTTPException
+from pydantic import BaseModel, Field
+
+from .generator import generate_presentation
+from datetime import date
+from .llm import generate_lecture_content
+
+from fastapi import File, Form, UploadFile
+from starlette.concurrency import run_in_threadpool
+
+from .pdf_pipeline import (
+    MAX_FILE_BYTES,
+    generate_merged_slides,
+    merge_lecture_texts,
+)
+
+import re
+import logging
+
+logger = logging.getLogger(__name__)
+
+app = FastAPI(
+    title="AI-Powered Lecture Slide Generator",
+    version="0.1.0",
+)
+
+
+class SkillLevel(str, Enum):
+    beginner = "beginner"
+    intermediate = "intermediate"
+    advanced = "advanced"
+
+
+class PresentationRequest(BaseModel):
+    topic: str = Field(min_length=3, max_length=200)
+    skill_level: SkillLevel = SkillLevel.beginner
+    slide_count: int = Field(default=5, ge=2, le=30)
+
+
+@app.get("/", include_in_schema=False)
+def homepage():
+    return RedirectResponse(
+        url="/lecture-workspace",
+        status_code=307
+    )
+
+@app.get("/health")
+def health():
+    return {"status": "healthy"}
+
+
+@app.post("/generate")
+def generate(request: PresentationRequest):
+    # Generate educational content using self-hosted Qwen.
+    try:
+        ai_content = generate_lecture_content(
+            topic=request.topic,
+            skill_level=request.skill_level.value,
+            slide_count=request.slide_count,
+        )
+
+        output = generate_presentation(
+            topic=request.topic,
+            skill_level=request.skill_level.value,
+            slide_count=request.slide_count,
+            content=ai_content,
+        )
+    except (RuntimeError, ValueError) as exc:
+        logger.exception("AI slide generation failed")
+        raise HTTPException(
+            status_code=502,
+            detail="AI slide generation failed. Check Ollama and try again."
+        ) from exc
+
+    safe_topic = re.sub(
+        r"[^a-zA-Z0-9]+",
+        "_",
+        request.topic,
+    ).strip("_")[:80] or "Lecture"
+
+    creation_date = date.today().isoformat()
+    filename = f"{safe_topic}_{creation_date}.pptx"
+
+    return StreamingResponse(
+        output,
+        media_type=(
+            "application/vnd.openxmlformats-officedocument."
+            "presentationml.presentation"
+        ),
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"'
+        },
+    )
+
+
+@app.post("/generate-from-pdfs")
+async def generate_from_pdfs(
+    files: list[UploadFile] = File(...),
+    topic: str = Form("Combined Lecture"),
+    skill_level: str = Form("intermediate"),
+    slide_count: int = Form(8),
+):
+    if not 1 <= len(files) <= 5:
+        raise HTTPException(
+            status_code=422,
+            detail="Please upload between 1 and 5 PDFs."
+        )
+
+    if skill_level not in {"beginner", "intermediate", "advanced"}:
+        raise HTTPException(
+            status_code=422,
+            detail="Invalid audience skill level."
+        )
+
+    if not 2 <= slide_count <= 30:
+        raise HTTPException(
+            status_code=422,
+            detail="Slide count must be between 2 and 30."
+        )
+
+    if not 3 <= len(topic.strip()) <= 200:
+        raise HTTPException(
+            status_code=422,
+            detail="Title must contain 3 to 200 characters."
+        )
+
+    documents = []
+
+    for file in files:
+        try:
+            data = await file.read(MAX_FILE_BYTES + 1)
+        finally:
+            await file.close()
+
+        documents.append((file.filename or "lecture.pdf", data))
+
+    try:
+        source_text = await run_in_threadpool(
+            merge_lecture_texts, documents
+        )
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=422,
+            detail=str(exc)
+        ) from exc
+
+    try:
+        content = await run_in_threadpool(
+            generate_merged_slides,
+            source_text,
+            topic,
+            skill_level,
+            slide_count,
+        )
+
+        output = await run_in_threadpool(
+            generate_presentation,
+            topic,
+            skill_level,
+            slide_count,
+            content,
+        )
+
+    except Exception as exc:
+        logger.exception("Multiple-PDF generation failed")
+        raise HTTPException(
+            status_code=502,
+            detail="AI processing failed. Review the server logs."
+        ) from exc
+
+    safe_title = re.sub(
+        r"[^a-zA-Z0-9]+", "_", topic
+    ).strip("_")[:80] or "Combined_Lecture"
+
+    filename = (
+        f"{safe_title}_{date.today().isoformat()}.pptx"
+    )
+
+    return StreamingResponse(
+        output,
+        media_type=(
+            "application/vnd.openxmlformats-officedocument."
+            "presentationml.presentation"
+        ),
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"'
+        },
+    )
+
+# Multi-PDF lecture review workspace (separate from existing endpoints).
+from .lecture_routes import router as lecture_router
+app.include_router(lecture_router)

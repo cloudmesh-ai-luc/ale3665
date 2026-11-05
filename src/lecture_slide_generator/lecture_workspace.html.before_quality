@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-Powered Lecture Slide Generator</title>
+<style>
+:root{font-family:system-ui,Arial,sans-serif;color:#162a43;background:#f3f6fb}*{box-sizing:border-box}body{margin:0}header{padding:28px 6%;background:#172d52;color:white}header h1{margin:0 0 6px;font-size:26px}header p{margin:0;color:#cbd8ed}main{max-width:1020px;margin:28px auto;padding:0 18px}.panel{background:#fff;border:1px solid #dbe3ee;border-radius:14px;padding:24px;margin:16px 0;box-shadow:0 4px 18px #1829460a}h2{margin-top:0;font-size:20px}label{display:block;font-weight:650;margin:16px 0 6px}input,select,textarea{width:100%;font:inherit;padding:11px;border:1px solid #b8c8df;border-radius:8px}input[type=file]{padding:20px;border:2px dashed #96accd;background:#f9fbff}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}button{border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:pointer;background:#285bb5;color:white}button:disabled{opacity:.55;cursor:wait}.secondary{background:#e8edf6;color:#1b3760}.small{padding:6px 10px;font-size:12px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.muted{color:#60718b;font-size:14px}.outline{display:grid;gap:10px}.slide{border:1px solid #cdd9e9;padding:16px;border-radius:10px;background:#fcfdff}.slide b{font-size:13px;color:#4e6080} .source{font-size:12px;color:#536782} .status{min-height:1.5em;white-space:pre-line}a{color:inherit}@media(max-width:700px){.grid{grid-template-columns:1fr}}
+
+.mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+.mode-tab{background:#e8edf6;color:#17365d;border:2px solid transparent}
+.mode-tab.active{border-color:#285bb5;background:#e3edff}
+.mode-tab[aria-selected="true"]{border-color:#285bb5}
+label{color:#18304c}.status{color:#285180}.panel{scroll-margin-top:20px}
+[hidden]{display:none!important}
+@media(max-width:700px){.mode-tabs{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><h1>AI-Powered Lecture Slide Generator</h1><p>Create from a topic or combine lecture PDFs into an editable PowerPoint</p></header>
+<main>
+<p class="muted">Self-hosted Qwen · Ubuntu WSL2 development · Editable PowerPoint export</p>
+<div class="mode-tabs" role="tablist" aria-label="Choose generation method">
+  <button type="button" class="mode-tab active" id="topic-tab" role="tab" aria-selected="true" aria-controls="topic-section">Generate from Topic</button>
+  <button type="button" class="mode-tab" id="pdf-tab" role="tab" aria-selected="false" aria-controls="pdf-section">Generate from PDFs</button>
+</div>
+<section class="panel" id="topic-section" role="tabpanel" aria-labelledby="topic-tab">
+<h2>Create a presentation from a topic</h2>
+<p class="muted">Enter the subject and select your audience. Qwen will generate the teaching content.</p>
+<form id="topic-form">
+<label for="topic-input">Lecture topic</label><input id="topic-input" minlength="3" maxlength="200" placeholder="Introduction to Artificial Intelligence" required>
+<div class="grid"><div><label for="topic-level">Audience</label><select id="topic-level"><option>beginner</option><option selected>intermediate</option><option>advanced</option></select></div>
+<div><label for="topic-count">Total slides (including title)</label><input type="number" id="topic-count" value="8" min="2" max="30" required></div></div>
+<p class="muted">Topic generation produces a PowerPoint directly. PDF generation offers an outline review before export.</p>
+<button id="topic-submit" type="submit">Generate PowerPoint</button>
+<p id="topic-status" class="status" role="status" aria-live="polite"></p>
+</form>
+</section>
+<div id="pdf-section" role="tabpanel" aria-labelledby="pdf-tab" hidden>
+<section class="panel">
+<h2>1. Upload lecture materials</h2>
+<form id="upload-form">
+<label for="title">Presentation title</label><input id="title" minlength="3" maxlength="200" value="Foundations of Artificial Intelligence" required>
+<label for="files">Lecture PDFs (up to 20, 10 MB each)</label><input type="file" id="files" accept=".pdf,application/pdf" multiple required>
+<p id="file-feedback" class="muted">Text-based PDFs. Current limits: 300 pages total, 240,000 extracted characters, 65 text sections. No OCR yet.</p>
+<div class="grid"><div><label for="level">Audience</label><select id="level"><option>beginner</option><option selected>intermediate</option><option>advanced</option></select></div><div><label for="count">Total slides (including title)</label><input type="number" id="count" value="12" min="2" max="60" required></div></div>
+<p class="muted">Large uploads require several Qwen calls; the browser must remain open while processing. Only use materials you have permission to process.</p>
+<button id="analyze" type="submit">Analyze PDFs and build outline</button>
+<p id="status" class="status" role="status" aria-live="polite"></p>
+</form>
+</section>
+<section id="review" class="panel" hidden>
+<h2>2. Review and edit the teaching sequence</h2>
+<p class="muted">Edit slide titles, adjust slide order, and revise source-backed teaching points. Each source must remain represented. Page references are approximate source-location aids and should be checked.</p>
+<div id="outline" class="outline"></div>
+<div class="row" style="margin-top:20px"><button id="export">Generate PowerPoint from approved outline</button><button id="reset" class="secondary" type="button">Discard outline</button></div>
+<p id="export-status" class="status" role="status" aria-live="polite"></p>
+</section>
+</div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+function selectMode(mode){
+ const pdf=mode==='pdf';
+ $('topic-section').hidden=pdf;
+ $('pdf-section').hidden=!pdf;
+ $('topic-tab').classList.toggle('active',!pdf);
+ $('pdf-tab').classList.toggle('active',pdf);
+ $('topic-tab').setAttribute('aria-selected',String(!pdf));
+ $('pdf-tab').setAttribute('aria-selected',String(pdf));
+}
+$('topic-tab').addEventListener('click',()=>selectMode('topic'));
+$('pdf-tab').addEventListener('click',()=>selectMode('pdf'));
+$('topic-form').addEventListener('submit',async (event)=>{
+ event.preventDefault();
+ const button=$('topic-submit'), status=$('topic-status');
+ button.disabled=true;status.textContent='Generating presentation with Qwen...';
+ try{
+  const response=await fetch('/generate',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({topic:$('topic-input').value,skill_level:$('topic-level').value,slide_count:Number($('topic-count').value)})
+  });
+  if(!response.ok){
+   let detail='Generation failed (HTTP '+response.status+').';
+   try{const err=await response.json();if(typeof err.detail==='string')detail=err.detail;}catch(_){}
+   throw new Error(detail);
+  }
+  const blob=await response.blob();
+  const match=(response.headers.get('Content-Disposition')||'').match(/filename="([^"]+)"/);
+  const filename=match?match[1]:'Lecture.pptx';
+  const url=URL.createObjectURL(blob), link=document.createElement('a');
+  link.href=url;link.download=filename;document.body.append(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),5000);status.textContent='Downloaded '+filename;
+ }catch(err){status.textContent='Could not generate presentation: '+err.message;}
+ finally{button.disabled=false;}
+});
+let plan = null;
+$('files').addEventListener('change', () => {
+ const files=[...$('files').files];
+ $('file-feedback').textContent=files.length ? `${files.length} files selected: ${files.map(f=>f.name).join(', ')}` : 'No files selected';
+ $('count').min=String(files.length+1);
+ if(Number($('count').value)<files.length+1) $('count').value=files.length+1;
+});
+function safeText(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;e.textContent=text;return e;}
+function showOutline(){
+ const root=$('outline');root.replaceChildren();
+ plan.outline.forEach((item,index)=>{
+  const card=safeText('div','slide','');
+  card.appendChild(safeText('b','',`Slide ${index+2} · ${item.source_ids.join(', ')}`));
+  const title=document.createElement('input');title.value=item.title;title.maxLength=130;title.setAttribute('aria-label',`Title for slide ${index+2}`);
+  title.addEventListener('input',()=>item.title=title.value);
+  card.appendChild(title);
+  const points=document.createElement('textarea');points.rows=4;points.value=item.points.join('\n');points.setAttribute('aria-label',`Teaching points for slide ${index+2}`);
+  points.addEventListener('input',()=>item.points=points.value.split('\n').map(x=>x.trim()).filter(Boolean).slice(0,4));
+  card.appendChild(points);
+  const pages=Object.entries(item.source_pages||{}).map(([s,p])=>`${s}: pages ${p.join(',') || 'not provided'}`).join(' · ');
+  card.appendChild(safeText('p','source',pages));
+  const buttons=safeText('div','row','');
+  for(const [label,delta] of [['Move up',-1],['Move down',1]]){
+   const b=safeText('button','secondary small',label);b.type='button';b.disabled=index+delta<0||index+delta>=plan.outline.length;
+   b.addEventListener('click',()=>{[plan.outline[index],plan.outline[index+delta]]=[plan.outline[index+delta],plan.outline[index]];showOutline();});buttons.appendChild(b);
+  }
+  card.appendChild(buttons);root.appendChild(card);
+ });
+}
+$('upload-form').addEventListener('submit',async e=>{
+ e.preventDefault();const files=[...$('files').files];
+ if(files.length<1||files.length>20){$('status').textContent='Choose between 1 and 20 PDFs.';return;}
+ if(files.some(f=>f.size>10*1024*1024)){$('status').textContent='A file exceeds 10 MB.';return;}
+ const count=Number($('count').value);if(count<files.length+1||count>60){$('status').textContent=`Choose between ${files.length+1} and 60 slides.`;return;}
+ const body=new FormData();files.forEach(f=>body.append('files',f));body.append('title',$('title').value);body.append('skill_level',$('level').value);body.append('slide_count',String(count));
+ $('analyze').disabled=true;$('status').textContent='Analyzing each lecture and planning the presentation. This can take some time for large documents.';
+ try{const r=await fetch('/api/lecture/outline',{method:'POST',body});const data=await r.json();if(!r.ok)throw new Error(typeof data.detail==='string'?data.detail:`HTTP ${r.status}`);plan=data;showOutline();$('review').hidden=false;$('status').textContent=`Outline ready: ${data.outline.length} content slides covering ${data.sources.length} PDFs.`;$('review').scrollIntoView({behavior:'smooth'});}
+ catch(err){$('status').textContent=`Could not analyze PDFs: ${err.message}`;}
+ finally{$('analyze').disabled=false;}
+});
+$('reset').addEventListener('click',()=>{plan=null;$('review').hidden=true;});
+$('export').addEventListener('click',async()=>{
+ if(!plan)return;const ids=new Set(plan.outline.flatMap(x=>x.source_ids));
+ if(plan.sources.some(s=>!ids.has(s.source_id))){$('export-status').textContent='Every uploaded PDF must remain represented.';return;}
+ if(plan.outline.some(x=>!x.title.trim()||x.points.length<1||x.points.length>4)){$('export-status').textContent='Check slide titles and teaching points.';return;}
+ $('export').disabled=true;$('export-status').textContent='Generating the editable PowerPoint from your reviewed outline...';
+ try{const r=await fetch('/api/lecture/export',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(plan)});if(!r.ok){const d=await r.json();throw new Error(typeof d.detail==='string'?d.detail:`HTTP ${r.status}`);}const blob=await r.blob();const match=(r.headers.get('Content-Disposition')||'').match(/filename="([^"]+)"/);const filename=match?match[1]:'Lecture.pptx';const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);$('export-status').textContent=`Downloaded ${filename}`;}
+ catch(err){$('export-status').textContent=`Export failed: ${err.message}`;}
+ finally{$('export').disabled=false;}
+});
+</script>
+</body></html>
