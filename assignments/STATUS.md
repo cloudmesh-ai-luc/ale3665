@@ -1,12 +1,16 @@
 # Weekly DevOps Status — Alessandra Vellucci Solari
 
-**Student:** Alessandra Vellucci Solari
-**GitHub Username:** `ale3665`
-**Course:** Cloud, AI & DevOps
-**Instructor:** Professor Gregor von Laszewski
-**Course Repository:** [cloudmesh-ai-luc/ale3665](https://github.com/cloudmesh-ai-luc/ale3665)
-**Individual Project:** AI-Powered Lecture Slide Generator
-**Last Updated:** November 17, 2026
+---
+
+| **Student Information** | **Details** |
+|---|---|
+| **Student** | Alessandra Vellucci Solari |
+| **GitHub Username** | `ale3665` |
+| **Course** | Cloud, AI & DevOps |
+| **Instructor** | Professor Gregor von Laszewski |
+| **Course Repository** | [cloudmesh-ai-luc/ale3665](https://github.com/cloudmesh-ai-luc/ale3665) |
+| **Individual Project** | AI-Powered Lecture Slide Generator |
+| **Last Updated** | November 17, 2026 |
 
 ---
 
