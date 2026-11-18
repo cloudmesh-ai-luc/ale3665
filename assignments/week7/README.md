@@ -1,14 +1,5 @@
 # Week 7 — Cloud, AI & DevOps
 
-**Student:** Alessandra Vellucci Solari  
-**GitHub ID:** `ale3665`  
-**Course:** Cloud Computing, DevOps, and AI  
-**Instructor:** Professor Gregor von Laszewski  
-**Repository:** [cloudmesh-ai-luc/ale3665](https://github.com/cloudmesh-ai-luc/ale3665)  
-**Individual Project:** AI-Powered Lecture Slide Generator
-
----
-
 ## Overview
 
 Week 7 focuses on Python-driven virtual machine management, contributing to the shared Cloudmesh AI VM implementation, and advancing the individual course project. My required platforms for the personal project and applicable Cloudmesh provider tests are **Jetstream2, Amazon Web Services (AWS), Google Cloud, and Multipass**.
