@@ -14,7 +14,7 @@
 
 ---
 
-## 2. Executive Summary (150–250 Words)
+## 2. Executive Summary
 
 **Problem:** Preparing lecture presentations from educational topics and existing course materials is time-consuming. Educators must organize instructional content, summarize lengthy documents, and create coherent slides while preserving the accuracy of the original information. Existing AI presentation tools may omit important details, introduce unsupported information, or depend on proprietary hosted models. In addition, deploying AI applications across different cloud platforms introduces challenges involving infrastructure configuration, reproducibility, resource availability, and cost.
 
