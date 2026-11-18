@@ -74,7 +74,8 @@ This screenshot documents the SSH authentication workflow used to establish secu
 
 The activity covered SSH key configuration and verification of GitHub authentication from the terminal.
 
-![Figure 1 — SSH Authentication](evidence/EVIDENCE 1 - SSH AUTHENTICATION.png)
+![Figure 1 — SSH Authentication](evidence/EVIDENCE%201%20-%20SSH%20AUTHENTICATION.png)
+  
 
 ### Figure 2 — Class WORK Directory
 
@@ -82,7 +83,8 @@ This screenshot documents the creation and organization of the `~/work` director
 
 The activity focused on Linux directory management and organizing the required class repositories.
 
-![Figure 2 — WORK Directory](evidence/EVIDENCE 2 - “WORK” DIRECTORY.png)
+![Figure 2 — WORK Directory](evidence/EVIDENCE%202%20-%20%E2%80%9CWORK%E2%80%9D%20DIRECTORY.png)
+
 
 ### Figure 3 — Bash Utilities
 
@@ -90,7 +92,8 @@ This screenshot documents the verification of the required Bash utilities used t
 
 The utilities include Git, curl, jq, and make, which support repository management, HTTP requests, JSON processing, and automated build tasks.
 
-![Figure 3 — Bash Utilities](evidence/EVIDENCE 3 - BASH UTILITIES.png)
+![Figure 3 — Bash Utilities](evidence/EVIDENCE%203%20-%20BASH%20UTILITIES.png)
+  
 
 ### Figure 4 — Launching Visual Studio Code and Configuring Git Bash
 
@@ -98,7 +101,8 @@ This screenshot documents launching Visual Studio Code directly from the termina
 
 The activity demonstrated how to connect a command-line workflow with the development environment.
 
-![Figure 4 — VS Code and Git Bash Configuration](evidence/EVIDENCE 4 - LAUNCHING VS CODE FROM TERMINAL  LAUNCHING AND MAKING GIT BASH DEFAULT (CODE .).png)
+![Figure 4 — VS Code and Git Bash](evidence/EVIDENCE%204%20-%20LAUNCHING%20VS%20CODE%20FROM%20TERMINAL%20%20LAUNCHING%20AND%20MAKING%20GIT%20BASH%20DEFAULT%20%28CODE%20.%29.png)
+  
 
 ### Figure 5 — LLM and Cline Integration in VS Code
 
@@ -106,7 +110,8 @@ This screenshot documents configuring Cline inside Visual Studio Code to communi
 
 The activity demonstrated how AI-assisted development tools can be integrated into an existing programming environment.
 
-![Figure 5 — LLM and Cline Integration](evidence/EVIDENCE 5 - LLM CLINE INTEGRATION ON VS CODE.png)
+![Figure 5 — Cline and LLM Integration](evidence/EVIDENCE%205%20-%20LLM%20CLINE%20INTEGRATION%20ON%20VS%20CODE.png)
+  
 
 ### Evidence Summary
 
