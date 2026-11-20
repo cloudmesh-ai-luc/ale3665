@@ -150,4 +150,4 @@ I completed the collaborative demonstration on November 17, 2026. Supporting scr
 
 **Final Verification Status:** Demonstration completed; screenshot evidence pending.
 
-**Related peer report:** [AnnieWall — DevOps Peer-Assisted Demo](https://github.com/cloudmesh-ai-luc/AnieWall/blob/main/assignments/reports/DevOps%20Peer-Assisted%20Demo)
+**Related peer report:** [AnnieWall — DevOps Peer-Assisted Demo](https://github.com/cloudmesh-ai-luc/AnieWall/blob/main/assignments/reports/DevOps%20Peer-Assisted%20Demo.md)
